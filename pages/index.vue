@@ -6,29 +6,26 @@
         spotify-songs
       </h1>
       <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+        <h2>Please authenticate with Spotify to see your song info:</h2>
+      </div>
+      <div>
+        <button @click="authenticate">
+          Login to Spotify
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    async authenticate () {
+      const redirectUrl = await this.$axios.get('/api/login')
+      window.location.href = redirectUrl.data
+    }
+  }
+}
 </script>
 
 <style>
