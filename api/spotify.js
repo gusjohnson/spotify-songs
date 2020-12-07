@@ -21,7 +21,7 @@ let accessToken, refreshToken
 router.use(cookieParser())
 router.use(cors())
 
-router.get('/login', function (req, res) {
+router.get('/login', function(req, res) {
   const state = generateRandomString(16)
   res.cookie(stateKey, state)
 
@@ -38,7 +38,7 @@ router.get('/login', function (req, res) {
   )
 })
 
-router.get('/callback', function (req, res) {
+router.get('/callback', function(req, res) {
   const code = req.query.code || null
   const state = req.query.state || null
   const storedState = req.cookies ? req.cookies[stateKey] : null
@@ -63,12 +63,25 @@ router.get('/callback', function (req, res) {
       json: true
     }
 
-    request.post(authOptions, function (error, response, body) {
+    request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         accessToken = body.access_token
         refreshToken = body.refresh_token
 
         res.cookie('spotify_access_token', accessToken)
+
+        // const meOptions = {
+        //   url: `${baseUrl}/me`,
+        //   headers: {
+        //     Authorization: { Authorization: 'Bearer ' + accessToken },
+        //   },
+        //   json: true
+        // }
+        // request.get(meOptions, function(error, response, body) {
+        //   if (!error && response.statusCode === 200) {
+
+        //   }
+        // })
         res.redirect('/')
       } else {
         res.redirect('/#' +
@@ -107,7 +120,8 @@ router.get('/spotify/*', async function (req, res) {
   try {
     const accessToken = req.cookies ? req.cookies.spotify_access_token : null
     if (!accessToken) {
-      throw new Error('User not authenticated to Spotify')
+      console.log('User not authenticated to Spotify')
+      res.status(401)
     }
 
     let path = req.params[0]
