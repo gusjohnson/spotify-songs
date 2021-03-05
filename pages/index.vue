@@ -1,10 +1,15 @@
 <template>
   <div class="container">
+    <div class="header">
+      <img class="login-photo" :src="user.images[0].url">
+      <h2>{{ user.display_name }}</h2>
+    </div>
     <div>
-      <Logo />
       <h1 class="title">
-        spotify-songs
+        Spotify Analysis
       </h1>
+    </div>
+    <div class="content">
       <div v-if="!loggedIn" class="links">
         <h2>Please authenticate with Spotify to see your song info:</h2>
       </div>
@@ -13,15 +18,20 @@
           Login to Spotify
         </button>
       </div>
-      <div v-else>
-        <h2>{{ user.display_name }}</h2>
-        <img :src="user.images[0].url">
-        <div v-for="song in topSongs" :key="song.id">
-          {{ song.name }}
+      <div v-else class="tops">
+        <!-- <h2>{{ user.display_name }}</h2>
+        <img :src="user.images[0].url"> -->
+        <div>
+          <h3>TOP SONGS</h3>
+          <div v-for="song in topSongs" :key="song.id">
+            {{ song.name }}
+          </div>
         </div>
-        <br><br>
-        <div v-for="artist in topArtists" :key="artist.id">
-          {{ artist.name }}
+        <div>
+          <h3>TOP ARTISTS</h3>
+          <div v-for="artist in topArtists" :key="artist.id">
+            {{ artist.name }}
+          </div>
         </div>
       </div>
     </div>
@@ -70,11 +80,38 @@ export default {
 <style>
 .container {
   margin: 0 auto;
-  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 20px;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.login-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  margin-right: 5px;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+}
+
+.tops {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
 }
 
 .title {
@@ -93,6 +130,7 @@ export default {
   font-size: 100px;
   color: #35495e;
   letter-spacing: 1px;
+  margin-bottom: 50px;
 }
 
 .subtitle {
