@@ -1,24 +1,26 @@
 <template>
   <div class="container">
     <div class="header">
-      <img class="login-photo" :src="user.images[0].url">
-      <h2>{{ user.display_name }}</h2>
+      <span v-if="loggedIn" class="user-info">
+        <img class="login-photo" :src="user.images[0].url">
+        <h2>{{ user.display_name }}</h2>
+      </span>
     </div>
-    <div>
+    <!-- <div>
       <h1 class="title">
         Spotify Analysis
       </h1>
+    </div> -->
+    <div v-if="!loggedIn" class="links">
+      <h2>Please authenticate with Spotify to see your song info:</h2>
     </div>
-    <div class="content">
-      <div v-if="!loggedIn" class="links">
-        <h2>Please authenticate with Spotify to see your song info:</h2>
-      </div>
-      <div v-if="!loggedIn">
-        <button @click="authenticate">
-          Login to Spotify
-        </button>
-      </div>
-      <div v-else class="tops">
+    <div v-if="!loggedIn">
+      <button @click="authenticate">
+        Login to Spotify
+      </button>
+    </div>
+    <div v-else class="content">
+      <div class="tops">
         <!-- <h2>{{ user.display_name }}</h2>
         <img :src="user.images[0].url"> -->
         <div>
@@ -96,6 +98,11 @@ export default {
   width: 100%;
 }
 
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
 .login-photo {
   width: 50px;
   height: 50px;
@@ -142,6 +149,7 @@ export default {
 }
 
 .links {
-  padding-top: 15px;
+  padding: 15px;
+
 }
 </style>
