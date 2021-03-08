@@ -1,16 +1,8 @@
 <template>
   <div class="container">
-    <div class="header">
-      <span v-if="loggedIn" class="user-info">
-        <img class="login-photo" :src="user.images[0].url">
-        <h2>{{ user.display_name }}</h2>
-      </span>
-    </div>
-    <!-- <div>
-      <h1 class="title">
-        Spotify Analysis
-      </h1>
-    </div> -->
+    <h2 class="align-self-start ml-2 pt-3 pb-5">
+      Top Music Overview
+    </h2>
     <div v-if="!loggedIn" class="links">
       <h2>Please authenticate with Spotify to see your song info:</h2>
     </div>
@@ -21,28 +13,26 @@
     </div>
     <div v-else class="content">
       <div class="tops">
-        <!-- <h2>{{ user.display_name }}</h2>
-        <img :src="user.images[0].url"> -->
-        <div>
-          <h3>TOP SONGS</h3>
-          <div v-for="song in topSongs" :key="song.id">
-            {{ song.name }}
-          </div>
-        </div>
-        <div>
-          <h3>TOP ARTISTS</h3>
-          <div v-for="artist in topArtists" :key="artist.id">
-            {{ artist.name }}
-          </div>
-        </div>
+        <TopSongs class="ml-10 mr-5" :songs="topSongs" />
+        <TopArtists class="ml-5 mr-10" :artists="topArtists" />
       </div>
+      <!-- <SongAnalysis /> -->
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import TopSongs from '~/components/TopSongs'
+import TopArtists from '~/components/TopArtists.vue'
+// import SongAnalysis from '~/components/SongAnalysis.vue'
+
 export default {
+  components: {
+    TopSongs,
+    TopArtists
+    // SongAnalysis
+  },
   async asyncData({ $axios, store, req }) {
     let loggedIn = false
     let topSongs = []
@@ -81,7 +71,6 @@ export default {
 
 <style>
 .container {
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -98,18 +87,6 @@ export default {
   width: 100%;
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-}
-
-.login-photo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  margin-right: 5px;
-}
-
 .content {
   width: 100%;
   display: flex;
@@ -117,7 +94,7 @@ export default {
 
 .tops {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   width: 100%;
 }
 

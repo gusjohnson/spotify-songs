@@ -1,8 +1,51 @@
 <template>
-  <div>
-    <Nuxt />
-  </div>
+  <v-app>
+    <v-navigation-drawer class="grey darken-3" fixed clipped app>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>
+            <span v-if="isLoggedIn" class="d-flex align-center justify-start grey--text text--lighten-4">
+              <img class="rounded-circle login-photo" :src="user.images[0].url">
+              <h3>{{ user.display_name }}</h3>
+            </span>
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider />
+      <v-list dense nav>
+        <v-list-item link>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text text--lighten-4">
+              Top Music Overview
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link>
+          <v-list-item-content>
+            <v-list-item-title class="grey--text text--lighten-4">
+              Recent Music Overview
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <v-main class="grey lighten-3">
+      <Nuxt />
+    </v-main>
+  </v-app>
 </template>
+
+<script>
+import { mapState, mapGetters } from 'vuex'
+
+export default {
+  name: 'Default',
+  computed: {
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn'])
+  }
+}
+</script>
 
 <style>
 html {
@@ -31,32 +74,14 @@ html {
   margin: 0;
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
+.user-info {
+  display: flex;
+  align-items: center;
 }
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+.login-photo {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
 }
 </style>
