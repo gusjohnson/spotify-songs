@@ -1,6 +1,13 @@
 <template>
-  <div class="grey lighten-3">
-    <bar-chart v-if="!isLoading" :data="barChartData" :options="barChartOptions" :height="200" />
+  <div class="grey lighten-3 rounded-lg">
+    <bar-chart
+      v-if="!isLoading"
+      class="pa-5"
+      :data="barChartData"
+      :options="barChartOptions"
+      :height="400"
+      :width="600"
+    />
   </div>
 </template>
 
@@ -38,9 +45,9 @@ export default {
         },
         title: {
           display: true,
-          text: this.song.name,
+          text: `${this.song.artists[0].name} - ${this.song.name}`,
           fontSize: 24,
-          fontColor: '#6b7280'
+          fontColor: '#212121'
         },
         tooltips: {
           backgroundColor: '#17BF62'
@@ -70,13 +77,17 @@ export default {
       isLoading: true
     }
   },
+  // computed: {
+  //   artist() {
+  //     return this.song.artists[0].name
+  //   }
+  // },
   async mounted() {
     try {
       const audioAnalysis = (await this.$axios.get(`/api/spotify/audio-features/${this.song.id}`)).data
       let dataPoints = [audioAnalysis.acousticness, audioAnalysis.danceability, audioAnalysis.energy,
         audioAnalysis.instrumentalness, audioAnalysis.liveness, audioAnalysis.speechiness, audioAnalysis.valence]
       dataPoints = dataPoints.map(val => val * 100)
-      console.log(dataPoints)
       const dataSet = {
         label: this.song.name,
         data: dataPoints,

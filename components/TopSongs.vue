@@ -22,7 +22,8 @@
           <tr
             v-for="(item, index) in songs"
             :key="item.id"
-            @click="$router.push(`/songs/${item.id}`)"
+            class="song-row"
+            @click="$emit('songClicked', item)"
           >
             <td>{{ index + 1 }}</td>
             <td><b>{{ item.name }}</b></td>
@@ -31,18 +32,12 @@
         </tbody>
       </template>
     </v-simple-table>
-    <!-- <SongAnalysis v-if="selectedSong" :song="selectedSong" /> -->
   </v-card>
 </template>
 
 <script>
-// import SongAnalysis from '~/components/SongAnalysis'
-
 export default {
   name: 'TopSongs',
-  components: {
-    // SongAnalysis
-  },
   props: {
     songs: {
       type: Array,
@@ -60,5 +55,9 @@ export default {
 <style scoped>
 .table {
   width: 45%;
+}
+
+.song-row {
+  cursor: pointer;
 }
 </style>

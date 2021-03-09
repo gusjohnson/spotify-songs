@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer class="grey darken-3" fixed clipped app>
+    <v-navigation-drawer v-if="isLoggedIn" class="grey darken-3" fixed clipped app>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>
@@ -30,7 +30,14 @@
       </v-list>
     </v-navigation-drawer>
     <v-main class="grey lighten-3">
-      <Nuxt />
+      <v-overlay v-if="!isLoggedIn">
+        <div>
+          <v-btn @click="authenticate">
+            Login to Spotify
+          </v-btn>
+        </div>
+      </v-overlay>
+      <Nuxt v-else />
     </v-main>
   </v-app>
 </template>
@@ -43,6 +50,12 @@ export default {
   computed: {
     ...mapState(['user']),
     ...mapGetters(['isLoggedIn'])
+  },
+  methods: {
+    async authenticate () {
+      const redirectUrl = await this.$axios.get('/api/login')
+      window.location.href = redirectUrl.data
+    }
   }
 }
 </script>

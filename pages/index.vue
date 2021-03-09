@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <v-overlay v-if="selectedSong">
+      <SongAnalysis v-click-outside="hideGraph" :song="selectedSong" />
+    </v-overlay>
     <h2 class="align-self-start ml-2 pt-3 pb-5">
       Top Music Overview
     </h2>
@@ -13,7 +16,7 @@
     </div>
     <div v-else class="content">
       <div class="tops">
-        <TopSongs class="ml-10 mr-5" :songs="topSongs" />
+        <TopSongs class="ml-10 mr-5" :songs="topSongs" @songClicked="showSongGraph" />
         <TopArtists class="ml-5 mr-10" :artists="topArtists" />
       </div>
     </div>
@@ -24,11 +27,13 @@
 import { mapState } from 'vuex'
 import TopSongs from '~/components/TopSongs'
 import TopArtists from '~/components/TopArtists.vue'
+import SongAnalysis from '~/components/SongAnalysis'
 
 export default {
   components: {
     TopSongs,
-    TopArtists
+    TopArtists,
+    SongAnalysis
   },
   async asyncData({ $axios, store, req }) {
     let loggedIn = false
@@ -54,6 +59,11 @@ export default {
       topArtists
     }
   },
+  data () {
+    return {
+      selectedSong: null
+    }
+  },
   computed: {
     ...mapState(['user'])
   },
@@ -61,6 +71,12 @@ export default {
     async authenticate () {
       const redirectUrl = await this.$axios.get('/api/login')
       window.location.href = redirectUrl.data
+    },
+    showSongGraph(song) {
+      this.selectedSong = song
+    },
+    hideGraph() {
+      this.selectedSong = null
     }
   }
 }
@@ -124,6 +140,5 @@ export default {
 
 .links {
   padding: 15px;
-
 }
 </style>
