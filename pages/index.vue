@@ -16,7 +16,6 @@
         <TopSongs class="ml-10 mr-5" :songs="topSongs" />
         <TopArtists class="ml-5 mr-10" :artists="topArtists" />
       </div>
-      <!-- <SongAnalysis /> -->
     </div>
   </div>
 </template>
@@ -25,13 +24,11 @@
 import { mapState } from 'vuex'
 import TopSongs from '~/components/TopSongs'
 import TopArtists from '~/components/TopArtists.vue'
-// import SongAnalysis from '~/components/SongAnalysis.vue'
 
 export default {
   components: {
     TopSongs,
     TopArtists
-    // SongAnalysis
   },
   async asyncData({ $axios, store, req }) {
     let loggedIn = false

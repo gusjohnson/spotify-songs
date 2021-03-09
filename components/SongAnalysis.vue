@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <bar-chart :data="barChartData" :options="barChartOptions" :height="200" />
+  <div class="grey lighten-3">
+    <bar-chart v-if="!isLoading" :data="barChartData" :options="barChartOptions" :height="200" />
   </div>
 </template>
 
@@ -21,36 +21,15 @@ export default {
     return {
       barChartData: {
         labels: [
-          '2019-06',
-          '2019-07',
-          '2019-08',
-          '2019-09',
-          '2019-10',
-          '2019-11',
-          '2019-12',
-          '2020-01',
-          '2020-02',
-          '2020-03',
-          '2020-04',
-          '2020-05'
+          'Acousticness',
+          'Danceability',
+          'Energy',
+          'Instrumentalness',
+          'Liveness',
+          'Speechiness',
+          'Valence'
         ],
-        datasets: [
-          {
-            label: 'Visits',
-            data: [10, 15, 20, 30, 40, 50, 60, 70, 34, 45, 11, 78, 45],
-            backgroundColor: '#003f5c'
-          },
-          {
-            label: 'Pages Views',
-            data: [30, 24, 57, 23, 68, 72, 25, 64, 133, 143, 165, 33, 56],
-            backgroundColor: '#2f4b7c'
-          },
-          {
-            label: 'Users',
-            data: [45, 65, 30, 53, 34, 35, 26, 37, 34, 45, 67, 87, 98],
-            backgroundColor: '#665191'
-          }
-        ]
+        datasets: []
       },
       barChartOptions: {
         responsive: true,
@@ -59,7 +38,7 @@ export default {
         },
         title: {
           display: true,
-          text: 'Google analytics data',
+          text: this.song.name,
           fontSize: 24,
           fontColor: '#6b7280'
         },
@@ -77,16 +56,38 @@ export default {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true
+                beginAtZero: true,
+                suggestedMin: 0,
+                suggestedMax: 100
               },
               gridLines: {
-                display: false
+                display: true
               }
             }
           ]
         }
-      }
+      },
+      isLoading: true
     }
+  },
+  async mounted() {
+    try {
+      const audioAnalysis = (await this.$axios.get(`/api/spotify/audio-features/${this.song.id}`)).data
+      let dataPoints = [audioAnalysis.acousticness, audioAnalysis.danceability, audioAnalysis.energy,
+        audioAnalysis.instrumentalness, audioAnalysis.liveness, audioAnalysis.speechiness, audioAnalysis.valence]
+      dataPoints = dataPoints.map(val => val * 100)
+      console.log(dataPoints)
+      const dataSet = {
+        label: this.song.name,
+        data: dataPoints,
+        backgroundColor: '#1B5E20'
+      }
+      this.barChartData.datasets.push(dataSet)
+    } catch (e) {
+      console.log('Error')
+    }
+
+    this.isLoading = false
   }
 }
 </script>
