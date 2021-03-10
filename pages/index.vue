@@ -3,9 +3,9 @@
     <v-overlay v-if="selectedSong">
       <SongAnalysis v-click-outside="hideGraph" :song="selectedSong" />
     </v-overlay>
-    <h2 class="align-self-start ml-2 pt-3 pb-5">
+    <h3 class="align-self-start ml-2 pt-1 pb-5">
       Top Music Overview
-    </h2>
+    </h3>
     <div v-if="!loggedIn" class="links">
       <h2>Please authenticate with Spotify to see your song info:</h2>
     </div>
