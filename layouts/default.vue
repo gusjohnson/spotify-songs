@@ -1,12 +1,14 @@
 <template>
   <v-app>
     <v-app-bar
-      color="grey lighten-3"
+      color="grey darken-4"
       flat
       dense
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-app-bar-title>Spotify Music Analyzer</v-app-bar-title>
+      <v-app-bar-nav-icon class="grey--text text--lighten-4" @click.stop="drawer = !drawer" />
+      <v-app-bar-title class="grey--text text--lighten-4">
+        <b>Spotify Music Analyzer</b>
+      </v-app-bar-title>
     </v-app-bar>
     <v-expand-x-transition>
       <v-navigation-drawer
@@ -46,7 +48,7 @@
         </v-list>
       </v-navigation-drawer>
     </v-expand-x-transition>
-    <v-main class="grey lighten-3">
+    <v-main class="grey darken-3">
       <v-overlay v-if="!isLoggedIn">
         <div>
           <v-btn @click="authenticate">
@@ -86,7 +88,7 @@ export default {
 </script>
 
 <style>
-html {
+/* html {
   font-family:
     'Source Sans Pro',
     -apple-system,
@@ -103,7 +105,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-}
+} */
 
 *,
 *::before,

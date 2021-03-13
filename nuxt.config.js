@@ -9,6 +9,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      // {
+      //   rel: 'stylesheet',
+      //   href: 'https://fonts.googleapis.com/css?family=Titillium+Web'
+      // }
     ]
   },
 
@@ -45,5 +49,10 @@ export default {
 
   serverMiddleware: {
     '/api': '~/api'
+  },
+
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    treeShake: true
   }
 }

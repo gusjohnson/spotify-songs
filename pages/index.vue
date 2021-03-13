@@ -3,9 +3,10 @@
     <v-overlay v-if="selectedSong">
       <SongAnalysis v-click-outside="hideGraph" :song="selectedSong" />
     </v-overlay>
-    <h3 class="align-self-start ml-2 pt-1 pb-5">
-      Top Music Overview
-    </h3>
+    <h4 class="grey--text text--lighten-4 pt-5 pb-10">
+      Below are lists of your top 20 listened-to tracks and artists on Spotify.
+      Click a track or artist row to see cool stuff!
+    </h4>
     <div v-if="!loggedIn" class="links">
       <h2>Please authenticate with Spotify to see your song info:</h2>
     </div>
@@ -14,7 +15,7 @@
         Login to Spotify
       </button>
     </div>
-    <div v-else class="content">
+    <div v-else class="content pb-15">
       <div class="tops">
         <TopSongs class="ml-10 mr-5" :songs="topSongs" @songClicked="showSongGraph" />
         <TopArtists class="ml-5 mr-10" :artists="topArtists" />
@@ -89,6 +90,7 @@ export default {
   justify-content: center;
   align-items: center;
   text-align: center;
+  max-height: 100%;
 }
 
 .header {
@@ -109,33 +111,6 @@ export default {
   display: flex;
   justify-content: flex-start;
   width: 100%;
-}
-
-.title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-  margin-bottom: 50px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
 }
 
 .links {
