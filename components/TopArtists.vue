@@ -1,9 +1,9 @@
 <template>
-  <v-card class="table grey lighten-5 rounded-lg">
-    <v-card-title>
+  <v-card class="card grey darken-4 rounded-lg">
+    <v-card-title class="grey--text text--lighten-4">
       Top Artists
     </v-card-title>
-    <v-simple-table class="py-3 grey lighten-5" dense>
+    <v-simple-table class="table py-3 grey lighten-5" dense>
       <template v-slot:default>
         <thead>
           <tr>
@@ -19,6 +19,8 @@
           <tr
             v-for="(item, index) in artists"
             :key="item.id"
+            class="artist-row"
+            @click="$emit('artistClicked', item)"
           >
             <td>{{ index + 1 }}</td>
             <td><b>{{ item.name }}</b></td>
@@ -42,7 +44,18 @@ export default {
 </script>
 
 <style scoped>
-.table {
+.card {
   width: 45%;
+  /* max-height: 25%;
+  height: 25%; */
+}
+
+.table {
+  max-height: 100%;
+  overflow: auto;
+}
+
+.artist-row {
+  cursor: pointer;
 }
 </style>

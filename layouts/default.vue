@@ -2,6 +2,7 @@
   <v-app>
     <v-app-bar
       color="grey darken-4"
+      app
       flat
       dense
     >
@@ -51,8 +52,8 @@
     <v-main class="grey darken-3">
       <v-overlay v-if="!isLoggedIn">
         <div>
-          <v-btn @click="authenticate">
-            Login to Spotify
+          <v-btn class="green" rounded @click="authenticate">
+            Login with Spotify Account
           </v-btn>
         </div>
       </v-overlay>
