@@ -9,6 +9,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      // {
+      //   rel: 'stylesheet',
+      //   href: 'https://fonts.googleapis.com/css?family=Titillium+Web'
+      // }
     ]
   },
 
@@ -26,7 +30,8 @@ export default {
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/vuetify'
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -44,5 +49,10 @@ export default {
 
   serverMiddleware: {
     '/api': '~/api'
+  },
+
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    treeShake: true
   }
 }

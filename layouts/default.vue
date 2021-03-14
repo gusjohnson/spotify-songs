@@ -1,11 +1,95 @@
 <template>
-  <div>
-    <Nuxt />
-  </div>
+  <v-app>
+    <v-app-bar
+      color="grey darken-4"
+      app
+      flat
+      dense
+    >
+      <v-app-bar-nav-icon class="grey--text text--lighten-4" @click.stop="drawer = !drawer" />
+      <v-app-bar-title class="grey--text text--lighten-4">
+        <b>Spotify Music Analyzer</b>
+      </v-app-bar-title>
+    </v-app-bar>
+    <v-expand-x-transition>
+      <v-navigation-drawer
+        v-if="drawer"
+        v-click-outside="onClickOutside"
+        class="grey darken-3 elevation-10"
+        fixed
+        clipped
+        app
+      >
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>
+              <span v-if="isLoggedIn" class="d-flex align-center justify-start grey--text text--lighten-4">
+                <img class="rounded-circle login-photo" :src="user.images[0].url">
+                <h3>{{ user.display_name }}</h3>
+              </span>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider />
+        <v-list dense nav>
+          <v-list-item link>
+            <v-list-item-content>
+              <v-list-item-title class="grey--text text--lighten-4">
+                Top Music Overview
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item link>
+            <v-list-item-content>
+              <v-list-item-title class="grey--text text--lighten-4">
+                Recent Music Overview
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+    </v-expand-x-transition>
+    <v-main class="grey darken-3">
+      <v-overlay v-if="!isLoggedIn">
+        <div>
+          <v-btn class="green" rounded @click="authenticate">
+            Login with Spotify Account
+          </v-btn>
+        </div>
+      </v-overlay>
+      <Nuxt v-else />
+    </v-main>
+  </v-app>
 </template>
 
+<script>
+import { mapState, mapGetters } from 'vuex'
+
+export default {
+  name: 'Default',
+  data() {
+    return {
+      drawer: false
+    }
+  },
+  computed: {
+    ...mapState(['user']),
+    ...mapGetters(['isLoggedIn'])
+  },
+  methods: {
+    async authenticate () {
+      const redirectUrl = await this.$axios.get('/api/login')
+      window.location.href = redirectUrl.data
+    },
+    onClickOutside() {
+      this.drawer = false
+    }
+  }
+}
+</script>
+
 <style>
-html {
+/* html {
   font-family:
     'Source Sans Pro',
     -apple-system,
@@ -22,7 +106,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-}
+} */
 
 *,
 *::before,
@@ -31,32 +115,18 @@ html {
   margin: 0;
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
+.user-info {
+  display: flex;
+  align-items: center;
 }
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
+.login-photo {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
 }
 
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+.menu {
+  cursor: pointer;
 }
 </style>

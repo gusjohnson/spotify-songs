@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable camelcase */
 /* eslint-disable no-undef */
 
@@ -6,60 +7,43 @@ const { Router } = require('express')
 const router = Router()
 const request = require('request')
 const axios = require('axios')
+const cookieParser = require('cookie-parser')
+const cors = require('cors')
 
-const client_id = '953922c863b1462da160a182af9f5330'
-const client_secret = '762f8c9887ed4c0dba1e0f7d7639d3ad'
-// var redirect_uri = 'http://localhost:8888/callback'
-const redirect_uri = 'http://localhost:3000/api/callback'
+const client_id = process.env.SPOTIFY_CLIENT_ID
+const client_secret = process.env.SPOTIFY_CLIENT_SECRET
+const redirect_uri = process.env.SPOTIFY_REDIRECT_URI
 const baseUrl = 'https://api.spotify.com/v1'
+const stateKey = 'spotify_auth_state'
 
 let accessToken, refreshToken
 
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
-const generateRandomString = function (length) {
-  let text = ''
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+router.use(cookieParser())
+router.use(cors())
 
-  for (let i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length))
-  }
-  return text
-}
-
-const stateKey = 'spotify_auth_state'
-
-router.get('/login', function (req, res) {
+router.get('/login', function(req, res) {
   const state = generateRandomString(16)
   res.cookie(stateKey, state)
 
   // your application requests authorization
   const scope = 'user-read-private user-read-email user-top-read user-read-recently-played'
-  res.redirect('https://accounts.spotify.com/authorize?' +
+  res.end('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
       client_id,
       scope,
       redirect_uri,
       state
-    }))
+    })
+  )
 })
 
-router.get('/callback', function (req, res) {
-  // your application requests refresh and access tokens
-  // after checking the state parameter
-
+router.get('/callback', function(req, res) {
   const code = req.query.code || null
   const state = req.query.state || null
   const storedState = req.cookies ? req.cookies[stateKey] : null
-  console.log(state)
-  console.log(storedState)
 
-  // if (state === null || state !== storedState) {
-  if (state === null) {
+  if (state === null || state !== storedState) {
     res.redirect('/#' +
       querystring.stringify({
         error: 'state_mismatch'
@@ -79,28 +63,26 @@ router.get('/callback', function (req, res) {
       json: true
     }
 
-    request.post(authOptions, function (error, response, body) {
+    request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         accessToken = body.access_token
         refreshToken = body.refresh_token
 
-        const options = {
-          url: 'https://api.spotify.com/v1/me',
-          headers: { Authorization: 'Bearer ' + accessToken },
-          json: true
-        }
+        res.cookie('spotify_access_token', accessToken)
 
-        // use the access token to access the Spotify Web API
-        request.get(options, function (error, response, body) {
-          console.log(body)
-        })
+        // const meOptions = {
+        //   url: `${baseUrl}/me`,
+        //   headers: {
+        //     Authorization: { Authorization: 'Bearer ' + accessToken },
+        //   },
+        //   json: true
+        // }
+        // request.get(meOptions, function(error, response, body) {
+        //   if (!error && response.statusCode === 200) {
 
-        // we can also pass the token to the browser to make requests from there
-        res.redirect('/#' +
-          querystring.stringify({
-            accessToken,
-            refreshToken
-          }))
+        //   }
+        // })
+        res.redirect('/')
       } else {
         res.redirect('/#' +
           querystring.stringify({
@@ -136,6 +118,12 @@ router.get('/refresh_token', function (req, res) {
 
 router.get('/spotify/*', async function (req, res) {
   try {
+    const accessToken = req.cookies ? req.cookies.spotify_access_token : null
+    if (!accessToken) {
+      console.log('User not authenticated to Spotify')
+      res.status(401)
+    }
+
     let path = req.params[0]
     const query = querystring.stringify(req.query)
     path += `?${query}`
@@ -143,7 +131,7 @@ router.get('/spotify/*', async function (req, res) {
       res.status(400).message('Path is required')
     }
 
-    const getResponse = await get(path)
+    const getResponse = await get(path, accessToken)
     res.status(200).json(getResponse)
   } catch (e) {
     console.error('Error occurred querying Spotify', e)
@@ -151,7 +139,7 @@ router.get('/spotify/*', async function (req, res) {
   }
 })
 
-async function get (path) {
+async function get (path, accessToken) {
   if (!accessToken || accessToken === '') {
     throw new Error('User is not authenticated with Spotify')
   }
@@ -167,6 +155,21 @@ function response (code, message) {
     statusCode: code,
     message
   }
+}
+
+/**
+ * Generates a random string containing numbers and letters
+ * @param  {number} length The length of the string
+ * @return {string} The generated string
+ */
+function generateRandomString (length) {
+  let text = ''
+  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length))
+  }
+  return text
 }
 
 module.exports = router

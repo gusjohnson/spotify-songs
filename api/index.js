@@ -6,8 +6,8 @@ const cookieParser = require('cookie-parser')
 const spotify = require('./spotify')
 app.use(spotify)
 
-app.use(cors)
-app.use(cookieParser)
+app.use(cors())
+app.use(cookieParser())
 
 if (require.main === module) {
   const port = 3001
