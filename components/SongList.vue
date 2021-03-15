@@ -1,7 +1,7 @@
 <template>
-  <v-card class="card grey darken-4 rounded-lg">
+  <v-card class="card green darken-3 rounded-lg">
     <v-card-title class="grey--text text--lighten-4">
-      Top Tracks
+      {{ title }}
     </v-card-title>
     <v-simple-table class="table py-3 grey lighten-5" dense>
       <template v-slot:default>
@@ -21,7 +21,7 @@
         <tbody>
           <tr
             v-for="(item, index) in songs"
-            :key="item.id"
+            :key="index"
             class="song-row"
             @click="$emit('songClicked', item)"
           >
@@ -37,11 +37,15 @@
 
 <script>
 export default {
-  name: 'TopSongs',
+  name: 'SongList',
   props: {
     songs: {
       type: Array,
       default: () => []
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
   data () {

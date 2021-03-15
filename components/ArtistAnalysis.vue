@@ -2,6 +2,17 @@
   <div>
     <v-progress-circular v-if="isLoading" indeterminate />
     <div v-else class="grey lighten-3 rounded-lg song-graph-container">
+      <div class="d-flex align-center grey--text text--darken-4 pt-3">
+        <img v-if="artistPhoto" :src="artistPhoto" height="80" width="80" class="rounded-circle mx-4">
+        <div class="d-flex flex-column align-start">
+          <div class="text-caption mb-n2">
+            Artist Profile
+          </div>
+          <h2>
+            {{ artist.name }}
+          </h2>
+        </div>
+      </div>
       <bar-chart
         v-if="!isLoading"
         class="pa-10"
@@ -103,13 +114,6 @@ export default {
         legend: {
           display: false
         },
-        title: {
-          display: true,
-          text: `${this.artist.name}`,
-          fontSize: 24,
-          fontColor: '#212121',
-          fontFamily: "'Titillium Web', sans-serif"
-        },
         tooltips: {
           backgroundColor: '#17BF62'
         },
@@ -137,6 +141,11 @@ export default {
       },
       isLoading: true,
       showDefinitions: false
+    }
+  },
+  computed: {
+    artistPhoto() {
+      return this.artist.images[0]?.url
     }
   },
   async mounted() {

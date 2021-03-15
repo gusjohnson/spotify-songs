@@ -1,5 +1,5 @@
 <template>
-  <v-card class="card grey darken-4 rounded-lg">
+  <v-card class="card green darken-3 rounded-lg">
     <v-card-title class="grey--text text--lighten-4">
       Top Artists
     </v-card-title>
