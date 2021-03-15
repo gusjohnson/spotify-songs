@@ -6,14 +6,9 @@
     <v-overlay v-if="selectedArtist">
       <ArtistAnalysis v-click-outside="hideArtistGraph" :artist="selectedArtist" />
     </v-overlay>
-    <!-- <h4 class="grey--text text--lighten-4 pt-5 pb-10">
-      Below are lists of your top 20 listened-to tracks and artists on Spotify.
-      Click a track or artist row to see cool stuff!
-    </h4> -->
     <div class="content pt-5 pb-15">
       <div class="tops">
         <SongList class="ml-10 mr-5" :songs="topSongs" title="Recent Tracks" @songClicked="showSongGraph" />
-        <!-- <TopArtists class="ml-5 mr-10" :artists="topArtists" @artistClicked="showArtistGraph" /> -->
       </div>
     </div>
   </div>
@@ -22,21 +17,18 @@
 <script>
 import { mapState } from 'vuex'
 import SongList from '~/components/SongList'
-// import TopArtists from '~/components/TopArtists.vue'
 import SongAnalysis from '~/components/SongAnalysis'
 import ArtistAnalysis from '~/components/ArtistAnalysis'
 
 export default {
   components: {
     SongList,
-    // TopArtists,
     SongAnalysis,
     ArtistAnalysis
   },
   async asyncData({ $axios, store, req }) {
     let loggedIn = false
     let topSongs = []
-    // let topArtists = []
 
     try {
       const user = await $axios.get('/api/spotify/me')
@@ -54,7 +46,6 @@ export default {
     return {
       loggedIn,
       topSongs
-      // topArtists
     }
   },
   data () {

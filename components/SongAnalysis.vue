@@ -119,13 +119,6 @@ export default {
         legend: {
           display: false
         },
-        // title: {
-        //   display: true,
-        //   text: `${this.song.artists[0].name} - ${this.song.name}`,
-        //   fontSize: 24,
-        //   fontColor: '#212121',
-        //   fontFamily: "'Titillium Web', sans-serif"
-        // },
         tooltips: {
           backgroundColor: '#17BF62'
         },
@@ -157,9 +150,6 @@ export default {
     }
   },
   computed: {
-    // artist() {
-    //   return this.song.artists[0]
-    // },
     artistName() {
       return this.artist?.name || this.song.artists[0].name
     },

@@ -114,13 +114,6 @@ export default {
         legend: {
           display: false
         },
-        // title: {
-        //   display: true,
-        //   text: `${this.artist.name}`,
-        //   fontSize: 24,
-        //   fontColor: '#212121',
-        //   fontFamily: "'Titillium Web', sans-serif"
-        // },
         tooltips: {
           backgroundColor: '#17BF62'
         },

@@ -6,10 +6,6 @@
     <v-overlay v-if="selectedArtist">
       <ArtistAnalysis v-click-outside="hideArtistGraph" :artist="selectedArtist" />
     </v-overlay>
-    <!-- <h4 class="grey--text text--lighten-4 pt-5 pb-10">
-      Below are lists of your top 20 listened-to tracks and artists on Spotify.
-      Click a track or artist row to see cool stuff!
-    </h4> -->
     <div class="content pt-5 pb-15">
       <div class="tops">
         <SongList class="ml-10 mr-5" :songs="topSongs" title="Top Tracks" @songClicked="showSongGraph" />
