@@ -62,9 +62,9 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     treeShake: true
-  },
+  }//,
 
-  server: {
-    host: '0.0.0.0'
-  }
+  // server: {
+  //   host: '0.0.0.0'
+  // }
 }

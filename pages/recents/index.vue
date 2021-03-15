@@ -12,8 +12,8 @@
     </h4> -->
     <div class="content pt-5 pb-15">
       <div class="tops">
-        <SongList class="ml-10 mr-5" :songs="topSongs" title="Top Tracks" @songClicked="showSongGraph" />
-        <TopArtists class="ml-5 mr-10" :artists="topArtists" @artistClicked="showArtistGraph" />
+        <SongList class="ml-10 mr-5" :songs="topSongs" title="Recent Tracks" @songClicked="showSongGraph" />
+        <!-- <TopArtists class="ml-5 mr-10" :artists="topArtists" @artistClicked="showArtistGraph" /> -->
       </div>
     </div>
   </div>
@@ -22,21 +22,21 @@
 <script>
 import { mapState } from 'vuex'
 import SongList from '~/components/SongList'
-import TopArtists from '~/components/TopArtists.vue'
+// import TopArtists from '~/components/TopArtists.vue'
 import SongAnalysis from '~/components/SongAnalysis'
 import ArtistAnalysis from '~/components/ArtistAnalysis'
 
 export default {
   components: {
     SongList,
-    TopArtists,
+    // TopArtists,
     SongAnalysis,
     ArtistAnalysis
   },
   async asyncData({ $axios, store, req }) {
     let loggedIn = false
     let topSongs = []
-    let topArtists = []
+    // let topArtists = []
 
     try {
       const user = await $axios.get('/api/spotify/me')
@@ -44,8 +44,8 @@ export default {
         store.commit('set_user', user.data)
         loggedIn = true
 
-        topSongs = (await $axios.get('/api/spotify/me/top/tracks?time_range=long_term&limit=50')).data.items
-        topArtists = (await $axios.get('/api/spotify/me/top/artists?time_range=long_term&limit=50')).data.items
+        topSongs = (await $axios.get('/api/spotify/me/player/recently-played?limit=50')).data.items
+        topSongs = topSongs.map(t => t.track)
       }
     } catch (e) {
       console.log('Error fetching user account information from Spotify')
@@ -53,8 +53,8 @@ export default {
 
     return {
       loggedIn,
-      topSongs,
-      topArtists
+      topSongs
+      // topArtists
     }
   },
   data () {

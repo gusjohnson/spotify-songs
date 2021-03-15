@@ -10,9 +10,9 @@ const axios = require('axios')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 
-const client_id = process.env.SPOTIFY_CLIENT_ID
-const client_secret = process.env.SPOTIFY_CLIENT_SECRET
-const redirect_uri = process.env.SPOTIFY_REDIRECT_URI
+const client_id = '953922c863b1462da160a182af9f5330' || process.env.SPOTIFY_CLIENT_ID
+const client_secret = '762f8c9887ed4c0dba1e0f7d7639d3ad' || process.env.SPOTIFY_CLIENT_SECRET
+const redirect_uri = 'http://localhost:3000/api/callback' || process.env.SPOTIFY_REDIRECT_URI
 const baseUrl = 'https://api.spotify.com/v1'
 const stateKey = 'spotify_auth_state'
 

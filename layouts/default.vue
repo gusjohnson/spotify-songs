@@ -1,23 +1,21 @@
 <template>
   <v-app>
     <v-app-bar
-      color="grey darken-4"
+      color="green darken-3"
       app
       flat
       dense
     >
       <v-app-bar-nav-icon class="grey--text text--lighten-4" @click.stop="drawer = !drawer" />
       <v-app-bar-title class="grey--text text--lighten-4">
-        <b>Spotify Music Analyzer</b>
+        <b>Spotify Profiler</b>
       </v-app-bar-title>
     </v-app-bar>
     <v-expand-x-transition>
       <v-navigation-drawer
-        v-if="drawer"
-        v-click-outside="onClickOutside"
-        class="grey darken-3 elevation-10"
-        fixed
-        clipped
+        v-model="drawer"
+        class="grey darken-4 elevation-10"
+        temporary
         app
       >
         <v-list-item>
@@ -33,7 +31,7 @@
         <v-divider />
         <v-list dense nav>
           <v-list-item link>
-            <v-list-item-content>
+            <v-list-item-content @click="$router.push('/')">
               <v-list-item-title class="grey--text text--lighten-4">
                 Top Music Overview
               </v-list-item-title>
@@ -41,7 +39,7 @@
           </v-list-item>
           <v-list-item link>
             <v-list-item-content>
-              <v-list-item-title class="grey--text text--lighten-4">
+              <v-list-item-title class="grey--text text--lighten-4" @click="$router.push('/recents')">
                 Recent Music Overview
               </v-list-item-title>
             </v-list-item-content>
@@ -49,7 +47,7 @@
         </v-list>
       </v-navigation-drawer>
     </v-expand-x-transition>
-    <v-main class="grey darken-3">
+    <v-main class="grey darken-4">
       <v-overlay v-if="!isLoggedIn">
         <div>
           <v-btn class="green" rounded @click="authenticate">
@@ -80,9 +78,6 @@ export default {
     async authenticate () {
       const redirectUrl = await this.$axios.get('/api/login')
       window.location.href = redirectUrl.data
-    },
-    onClickOutside() {
-      this.drawer = false
     }
   }
 }
